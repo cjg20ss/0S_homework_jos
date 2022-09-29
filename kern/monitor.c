@@ -114,7 +114,7 @@ monitor(struct Trapframe *tf)
 
 	cprintf("Welcome to the JOS kernel monitor!\n");
 	cprintf("Type 'help' for a list of commands.\n");
-
+	cprintf("6828 decimal is %o octal!\n", 6828);
 
 	while (1) {
 		buf = readline("K> ");
