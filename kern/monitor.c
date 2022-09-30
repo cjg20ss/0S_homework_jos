@@ -64,6 +64,8 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 
 	// return 0;
 
+
+	// [lab1-exercise11,12] 函数调用栈中的参数回溯、打印stab符号表中的调试信息
 	// [参考资料]
 	// <https://www.jianshu.com/p/82c47da507d3>
 	// <https://www.cnblogs.com/wuhualong/p/lab01_exercise12_print_more_info.html>
