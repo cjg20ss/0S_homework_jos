@@ -13,8 +13,11 @@
 
 #define CMDBUF_SIZE	80	// enough for one VGA text line
 
-// test
+// test backtrace[lab1-exercise11,12]
 extern void test_backtrace(int x);
+
+// test rainbow[lab1-challenge]
+extern void test_rainbow();
 
 struct Command {
 	const char *name;
@@ -26,7 +29,15 @@ struct Command {
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
-	{ "backtrace", "[lab1-exercise12] Display a backtrace line for each stack frame", mon_backtrace },
+
+	{ "backtrace", "[lab1-exercise11,12] Display a backtrace line for each stack frame", mon_backtrace },
+	
+	{ "rainbow", "[lab1-challenge] Display a rainbow to test the text color", mon_rainbow },
+	{ "setfgc", "[lab1-challenge] Set foreground color", mon_setfgc },
+	{ "resetfgc", "[lab1-challenge] Reset foreground color", mon_resetfgc },
+	{ "setbgc", "[lab1-challenge] Set background color", mon_setbgc },
+	{ "resetbgc", "[lab1-challenge] Reset background color", mon_resetbgc },
+	{ "seecolor", "[lab1-challenge] See color table", mon_seecolor },
 };
 
 /***** Implementations of basic kernel monitor commands *****/
@@ -82,12 +93,17 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 		args[2] = *((uint32_t*)ebp + 4);
 		args[3] = *((uint32_t*)ebp + 5);
 		args[4] = *((uint32_t*)ebp + 6);
-		cprintf("  ebp %08x  eip %08x  args %08x %08x %08x %08x %08x\n", ebp, eip, args[0], args[1], args[2], args[3], args[4]);
+
+		cprintf("  ebp %08x  eip %08x  args %08x %08x %08x %08x %08x\n",
+			ebp, eip, args[0], args[1], args[2], args[3], args[4]);
 		
 		memset(&info, 0, sizeof(struct Eipdebuginfo));
 		ret = debuginfo_eip(eip, &info);
 		if (ret == 0) {
-			cprintf("         %s:%d: %.*s+%d\n", info.eip_file, info.eip_line, info.eip_fn_namelen, info.eip_fn_name, eip - info.eip_fn_addr);
+			cprintf("         %s:%d: %.*s+%d\n",
+				info.eip_file, info.eip_line,
+				info.eip_fn_namelen, info.eip_fn_name, eip - info.eip_fn_addr
+			);
 		} else {
 			cprintf("         fail to get debuginfo of [eip:%08x]\n", eip);
 		}
@@ -98,6 +114,65 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 	return 0;
 }
 
+int
+mon_rainbow(int argc, char** argv, struct Trapframe* tf)
+{
+	test_rainbow();
+	return 0;
+}
+
+int
+mon_setfgc(int argc, char **argv, struct Trapframe *tf)
+{
+	int clr = COLOR_WHITE;
+	if (argc >= 2 && '0' <= argv[1][0] && '7' >= argv[1][0]) 
+		clr = argv[1][0] - '0';
+	set_fgcolor(clr);
+	return 0;
+}
+
+int
+mon_resetfgc(int argc, char **argv, struct Trapframe *tf)
+{
+	reset_fgcolor();
+	return 0;
+}
+
+int
+mon_setbgc(int argc, char **argv, struct Trapframe *tf)
+{
+	int clr = COLOR_BLACK;
+	if (argc >= 2 && '0' <= argv[1][0] && '7' >= argv[1][0]) 
+		clr = argv[1][0] - '0';
+	set_bgcolor(clr);
+	return 0;
+}
+
+int
+mon_resetbgc(int argc, char **argv, struct Trapframe *tf)
+{
+	reset_bgcolor();
+	return 0;
+}
+
+int
+mon_seecolor(int argc, char **argv, struct Trapframe *tf)
+{
+	const char* colorlist[COLOR_NUM] = {
+		"black",
+		"red",
+		"green",
+		"yellow",
+		"blue",
+		"magenta",
+		"cyan",
+		"white"
+	};
+
+	for (int i = 0; i < COLOR_NUM; i++)
+		cprintf("%d: %s\n", i, colorlist[i]);
+	return 0;
+}
 
 
 /***** Kernel monitor command interpreter *****/
@@ -152,6 +227,9 @@ monitor(struct Trapframe *tf)
 	cprintf("Welcome to the JOS kernel monitor!\n");
 	cprintf("Type 'help' for a list of commands.\n");
 	cprintf("6828 decimal is %o octal!\n", 6828);
+
+	// // Test [lab1-challenge] by showing the rainbow
+	// test_rainbow();
 
 	while (1) {
 		buf = readline("K> ");

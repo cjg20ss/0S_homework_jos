@@ -192,6 +192,8 @@ cga_putc0(int c)
 	}
 
 	// What is the purpose of this?
+	// 当显示的内容超出一页时，把第一行的内容丢弃，后面n-1行向上平移
+	// 最后一行要用来与用户交互
 	if (crt_pos >= CRT_SIZE) {
 		int i;
 
@@ -228,15 +230,21 @@ atoi(const char* s)
 static void
 handle_ansi_esc_param(const char* buf, int len, int* attr)
 {
+	// 通过buf字符串，设置attr的低24位
+	// len用不到，通过buf最后一位不是数字字符就能判断长度
+
 	// white is light grey
+	// 这里的顺序要与/lib/stdio.h中color enum的顺序对应
 	static int ansi2cga[] = {0x0, 0x4, 0x2, 0xe, 0x1, 0x5, 0x3, 0x7};
 	int tmp_attr = *attr;
 	int n = atoi(buf);
-	if (n >= 30 && n <= 37) {
+	if (n >= 30 && n <= 37) {	// 3表示设置foreground颜色
+		// 先将attr的1-4位 置0，再与颜色对应
 		tmp_attr = (tmp_attr & ~(0x0f)) | ansi2cga[n - 30];
-	} else if (n >= 40 && n <= 47) {
+	} else if (n >= 40 && n <= 47) {	// 4表示设置background颜色
+		// 先将attr的5-8位 置0，再与颜色对应
 		tmp_attr = (tmp_attr & ~(0xf0)) | (ansi2cga[n - 40] << 4);
-	} else if (n == 0) {
+	} else if (n == 0) {	// 黑底白字
 		tmp_attr = 0x07;
 	}
 	*attr = tmp_attr;
@@ -247,7 +255,7 @@ handle_ansi_esc_param(const char* buf, int len, int* attr)
 // a number parameter with length of 1023, probably.
 #define ESC_BUFSZ 1024
 
-// [lab1-Challenge] VGA打印字符的文字颜色、背景颜色的设置。
+// [lab1-challenge] VGA打印字符的文字颜色、背景颜色的设置。
 // [参考资料]
 // <https://zhuanlan.zhihu.com/p/261875958>
 
@@ -272,8 +280,17 @@ handle_ansi_esc_param(const char* buf, int len, int* attr)
 // 		';'		=> [2] + record the modification of attribute
 // 		'm'		=> [0] + update the attribute
 // 		other 	=> [0] + discard the modification
+//
+// 我对该状态机的理解：
+// [0]状态：已打开字符输出
+// [1]状态：已关闭字符输出
+// [2]状态：输入参数
+// [3]状态：继续上一个参数的输入过程
+//         or 令刚输入的参数被记录（没有用m或;作为结尾的参数不会被记录在esc_attr中）
+// m把当前输入的参数记录在esc_attr中，并将esc_attr中的参数交给attr从而能够生效。        
+// ;把当前输入的参数记录在esc_attr中。        
 // 
-// "\033[<字符显示的方式>;<字符的颜色>;<字符的背景颜色>m <需要显示的字符>\033[m"
+// "\033[<字符显示的方式>;<字符的颜色>;<字符的背景颜色>m<需要显示的字符>"
 static void 
 cga_putc(int c)
 {
@@ -288,7 +305,7 @@ cga_putc(int c)
 		if ((char)c == '\033') {
 			state = 1;
 		} else {
-			cga_putc0((attr << 8) | (c & 0xff));	// 高24位就是attr的低24位，低8位就是c的低8位
+			cga_putc0((attr << 8) | (c & 0xff));	// 输出字符的高24位就是attr的低24位，低8位就是c的低8位
 		}
 		break;
 	}
