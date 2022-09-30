@@ -13,6 +13,8 @@
 
 #define CMDBUF_SIZE	80	// enough for one VGA text line
 
+// test
+extern void test_backtrace(int x);
 
 struct Command {
 	const char *name;
@@ -24,6 +26,7 @@ struct Command {
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
+	{ "backtrace", "[lab1-exercise12] Display a backtrace line for each stack frame", mon_backtrace },
 };
 
 /***** Implementations of basic kernel monitor commands *****/
@@ -58,6 +61,38 @@ int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
 	// Your code here.
+
+	// return 0;
+
+	// [参考资料]
+	// <https://www.jianshu.com/p/82c47da507d3>
+	// <https://www.cnblogs.com/wuhualong/p/lab01_exercise12_print_more_info.html>
+	uint32_t ebp, eip, args[5];
+	struct Eipdebuginfo info;
+	int ret;
+
+	ebp = read_ebp();
+
+	while (ebp != 0x0) {
+		eip = *((uint32_t*)ebp + 1);
+		args[0] = *((uint32_t*)ebp + 2);
+		args[1] = *((uint32_t*)ebp + 3);
+		args[2] = *((uint32_t*)ebp + 4);
+		args[3] = *((uint32_t*)ebp + 5);
+		args[4] = *((uint32_t*)ebp + 6);
+		cprintf("  ebp %08x  eip %08x  args %08x %08x %08x %08x %08x\n", ebp, eip, args[0], args[1], args[2], args[3], args[4]);
+		
+		memset(&info, 0, sizeof(struct Eipdebuginfo));
+		ret = debuginfo_eip(eip, &info);
+		if (ret == 0) {
+			cprintf("         %s:%d: %.*s+%d\n", info.eip_file, info.eip_line, info.eip_fn_namelen, info.eip_fn_name, eip - info.eip_fn_addr);
+		} else {
+			cprintf("         fail to get debuginfo of [eip:%08x]\n", eip);
+		}
+
+		ebp = *(uint32_t*)ebp;
+	}
+
 	return 0;
 }
 

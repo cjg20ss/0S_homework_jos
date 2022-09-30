@@ -212,6 +212,7 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 			// putch('X', putdat);
 			// break;
 
+			// 参考case 'x'的代码
 			num = getuint(&ap, lflag);
 			base = 8;
 			goto number;
