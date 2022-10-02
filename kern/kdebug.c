@@ -180,6 +180,7 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 	//	which one.
 	// Your code here.
 	
+	// [lab1-exercise12]
 	// [参考资料]
 	// <https://www.jianshu.com/p/82c47da507d3>
 	// <https://www.cnblogs.com/wuhualong/p/lab01_exercise12_print_more_info.html>
