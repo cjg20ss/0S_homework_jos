@@ -32,6 +32,7 @@
 	.stabs	"./inc/stdarg.h",130,0,0,0
 	.stabs	"va_list:t(2,1)=(2,2)=(2,3)=ar(2,4)=r(2,4);0;-1;;0;0;(2,5)=xs__va_list_tag:",128,0,0,0
 	.stabn	162,0,0,0
+	.stabs	" :T(1,1)=eCOLOR_BLACK:0,COLOR_RED:1,COLOR_GREEN:2,COLOR_YELLOW:3,COLOR_BLUE:4,COLOR_MAGENTA:5,COLOR_CYAN:6,COLOR_WHITE:7,COLOR_NUM:8,;",128,0,0,0
 	.stabn	162,0,0,0
 	.stabs	"./inc/string.h",130,0,0,0
 	.stabs	"./inc/types.h",130,0,0,0
@@ -125,6 +126,169 @@ test_backtrace:
 .Lscope1:
 	.section	.rodata.str1.1
 .LC2:
+	.string	"%c"
+.LC3:
+	.string	"\n"
+	.text
+	.p2align 4
+	.stabs	"rainbow:F(0,25)",36,0,0,rainbow
+	.stabs	"stride:P(0,1)",64,0,0,5
+	.globl	rainbow
+	.type	rainbow, @function
+rainbow:
+	.stabn	68,0,24,.LM10-.LFBB2
+.LM10:
+.LFBB2:
+.LFB1:
+	.cfi_startproc
+	endbr64
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	leaq	msg.1583(%rip), %r12
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+.LBB2:
+	.stabn	68,0,28,.LM11-.LFBB2
+.LM11:
+	subl	%r12d, %edi
+	leaq	8(%r12), %r13
+.LBE2:
+	.stabn	68,0,24,.LM12-.LFBB2
+.LM12:
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+.LBB3:
+	.stabn	68,0,28,.LM13-.LFBB2
+.LM13:
+	movl	%edi, %ebp
+.LBE3:
+	.stabn	68,0,24,.LM14-.LFBB2
+.LM14:
+	movq	%r12, %rbx
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 48
+	.p2align 4,,10
+	.p2align 3
+.L7:
+.LBB4:
+	.stabn	68,0,27,.LM15-.LFBB2
+.LM15:
+	movl	%ebx, %edi
+	subl	%r12d, %edi
+	call	set_fgcolor@PLT
+	.stabn	68,0,28,.LM16-.LFBB2
+.LM16:
+	leal	0(%rbp,%rbx), %edi
+	addq	$1, %rbx
+	movl	%edi, %eax
+	sarl	$31, %eax
+	shrl	$29, %eax
+	addl	%eax, %edi
+	andl	$7, %edi
+	subl	%eax, %edi
+	call	set_bgcolor@PLT
+	.stabn	68,0,29,.LM17-.LFBB2
+.LM17:
+	movsbl	-1(%rbx), %esi
+	leaq	.LC2(%rip), %rdi
+	xorl	%eax, %eax
+	call	cprintf@PLT
+	.stabn	68,0,26,.LM18-.LFBB2
+.LM18:
+	cmpq	%r13, %rbx
+	jne	.L7
+.LBE4:
+	.stabn	68,0,31,.LM19-.LFBB2
+.LM19:
+	xorl	%eax, %eax
+	call	reset_fgcolor@PLT
+	.stabn	68,0,32,.LM20-.LFBB2
+.LM20:
+	xorl	%eax, %eax
+	call	reset_bgcolor@PLT
+	.stabn	68,0,34,.LM21-.LFBB2
+.LM21:
+	addq	$8, %rsp
+	.cfi_def_cfa_offset 40
+	.stabn	68,0,33,.LM22-.LFBB2
+.LM22:
+	leaq	.LC3(%rip), %rdi
+	xorl	%eax, %eax
+	.stabn	68,0,34,.LM23-.LFBB2
+.LM23:
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	.stabn	68,0,33,.LM24-.LFBB2
+.LM24:
+	jmp	cprintf@PLT
+	.cfi_endproc
+.LFE1:
+	.size	rainbow, .-rainbow
+	.stabs	"msg:V(0,26)=ar(2,4);0;8;(0,2)",38,0,0,msg.1583
+	.stabn	192,0,0,.LFBB2-.LFBB2
+	.stabn	224,0,0,.Lscope2-.LFBB2
+.Lscope2:
+	.p2align 4
+	.stabs	"test_rainbow:F(0,25)",36,0,0,test_rainbow
+	.globl	test_rainbow
+	.type	test_rainbow, @function
+test_rainbow:
+	.stabn	68,0,39,.LM25-.LFBB3
+.LM25:
+.LFBB3:
+.LFB2:
+	.cfi_startproc
+	endbr64
+	pushq	%rbx
+	.cfi_def_cfa_offset 16
+	.cfi_offset 3, -16
+.LBB5:
+	.stabn	68,0,40,.LM26-.LFBB3
+.LM26:
+	movl	$1, %ebx
+	.p2align 4,,10
+	.p2align 3
+.L11:
+	.stabn	68,0,41,.LM27-.LFBB3
+.LM27:
+	movl	%ebx, %edi
+	.stabn	68,0,40,.LM28-.LFBB3
+.LM28:
+	addl	$1, %ebx
+	.stabn	68,0,41,.LM29-.LFBB3
+.LM29:
+	call	rainbow
+	.stabn	68,0,40,.LM30-.LFBB3
+.LM30:
+	cmpl	$8, %ebx
+	jne	.L11
+.LBE5:
+	.stabn	68,0,42,.LM31-.LFBB3
+.LM31:
+	popq	%rbx
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE2:
+	.size	test_rainbow, .-test_rainbow
+	.stabs	"i:r(0,1)",64,0,0,3
+	.stabn	192,0,0,.LBB5-.LFBB3
+	.stabn	224,0,0,.LBE5-.LFBB3
+.Lscope3:
+	.section	.rodata.str1.1
+.LC4:
 	.string	"6828 decimal is %o octal!\n"
 	.text
 	.p2align 4
@@ -132,76 +296,74 @@ test_backtrace:
 	.globl	i386_init
 	.type	i386_init, @function
 i386_init:
-	.stabn	68,0,24,.LM10-.LFBB2
-.LM10:
-.LFBB2:
-.LFB1:
+	.stabn	68,0,46,.LM32-.LFBB4
+.LM32:
+.LFBB4:
+.LFB3:
 	.cfi_startproc
 	endbr64
 	pushq	%rax
 	.cfi_def_cfa_offset 16
 	popq	%rax
 	.cfi_def_cfa_offset 8
-	.stabn	68,0,30,.LM11-.LFBB2
-.LM11:
+	.stabn	68,0,52,.LM33-.LFBB4
+.LM33:
 	leaq	edata(%rip), %rdi
 	leaq	end(%rip), %rdx
-	.stabn	68,0,30,.LM12-.LFBB2
-.LM12:
+	.stabn	68,0,52,.LM34-.LFBB4
+.LM34:
 	xorl	%esi, %esi
-	.stabn	68,0,30,.LM13-.LFBB2
-.LM13:
+	.stabn	68,0,52,.LM35-.LFBB4
+.LM35:
 	subq	%rdi, %rdx
-	.stabn	68,0,24,.LM14-.LFBB2
-.LM14:
+	.stabn	68,0,46,.LM36-.LFBB4
+.LM36:
 	subq	$8, %rsp
 	.cfi_def_cfa_offset 16
-	.stabn	68,0,30,.LM15-.LFBB2
-.LM15:
+	.stabn	68,0,52,.LM37-.LFBB4
+.LM37:
 	call	memset@PLT
-	.stabn	68,0,34,.LM16-.LFBB2
-.LM16:
+	.stabn	68,0,56,.LM38-.LFBB4
+.LM38:
 	call	cons_init@PLT
-	.stabn	68,0,36,.LM17-.LFBB2
-.LM17:
-	leaq	.LC2(%rip), %rdi
+	.stabn	68,0,58,.LM39-.LFBB4
+.LM39:
+	leaq	.LC4(%rip), %rdi
 	movl	$6828, %esi
 	xorl	%eax, %eax
 	call	cprintf@PLT
-	.stabn	68,0,39,.LM18-.LFBB2
-.LM18:
+	.stabn	68,0,61,.LM40-.LFBB4
+.LM40:
 	movl	$5, %edi
 	call	test_backtrace
 	.p2align 4,,10
 	.p2align 3
-.L7:
-	.stabn	68,0,43,.LM19-.LFBB2
-.LM19:
+.L15:
+	.stabn	68,0,65,.LM41-.LFBB4
+.LM41:
 	xorl	%edi, %edi
 	call	monitor@PLT
-	jmp	.L7
+	jmp	.L15
 	.cfi_endproc
-.LFE1:
+.LFE3:
 	.size	i386_init, .-i386_init
-.Lscope2:
+.Lscope4:
 	.section	.rodata.str1.1
-.LC3:
+.LC5:
 	.string	"kernel panic at %s:%d: "
-.LC4:
-	.string	"\n"
 	.text
 	.p2align 4
 	.stabs	"_panic:F(0,25)",36,0,0,_panic
-	.stabs	"file:P(0,26)=*(0,2)",64,0,0,10
+	.stabs	"file:P(0,27)=*(0,2)",64,0,0,10
 	.stabs	"line:P(0,1)",64,0,0,11
-	.stabs	"fmt:P(0,26)",64,0,0,6
+	.stabs	"fmt:P(0,27)",64,0,0,6
 	.globl	_panic
 	.type	_panic, @function
 _panic:
-	.stabn	68,0,59,.LM20-.LFBB3
-.LM20:
-.LFBB3:
-.LFB2:
+	.stabn	68,0,81,.LM42-.LFBB5
+.LM42:
+.LFBB5:
+.LFB4:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -216,7 +378,7 @@ _panic:
 	movq	%r8, 64(%rsp)
 	movq	%r9, 72(%rsp)
 	testb	%al, %al
-	je	.L10
+	je	.L18
 	movaps	%xmm0, 80(%rsp)
 	movaps	%xmm1, 96(%rsp)
 	movaps	%xmm2, 112(%rsp)
@@ -225,96 +387,96 @@ _panic:
 	movaps	%xmm5, 160(%rsp)
 	movaps	%xmm6, 176(%rsp)
 	movaps	%xmm7, 192(%rsp)
-.L10:
-	.stabn	68,0,59,.LM21-.LFBB3
-.LM21:
+.L18:
+	.stabn	68,0,81,.LM43-.LFBB5
+.LM43:
 	movq	%fs:40, %rax
 	movq	%rax, 24(%rsp)
 	xorl	%eax, %eax
-	.stabn	68,0,62,.LM22-.LFBB3
-.LM22:
+	.stabn	68,0,84,.LM44-.LFBB5
+.LM44:
 	cmpq	$0, panicstr(%rip)
-	je	.L15
+	je	.L23
 	.p2align 4,,10
 	.p2align 3
-.L12:
-	.stabn	68,0,78,.LM23-.LFBB3
-.LM23:
+.L20:
+	.stabn	68,0,100,.LM45-.LFBB5
+.LM45:
 	xorl	%edi, %edi
 	call	monitor@PLT
-	jmp	.L12
-.L15:
-	.stabn	68,0,64,.LM24-.LFBB3
-.LM24:
+	jmp	.L20
+.L23:
+	.stabn	68,0,86,.LM46-.LFBB5
+.LM46:
 	movq	%rbp, panicstr(%rip)
-	.stabn	68,0,67,.LM25-.LFBB3
-.LM25:
+	.stabn	68,0,89,.LM47-.LFBB5
+.LM47:
 #APP
-# 67 "kern/init.c" 1
+# 89 "kern/init.c" 1
 	cli; cld
 # 0 "" 2
-	.stabn	68,0,69,.LM26-.LFBB3
-.LM26:
+	.stabn	68,0,91,.LM48-.LFBB5
+.LM48:
 #NO_APP
 	leaq	224(%rsp), %rax
-	.stabn	68,0,70,.LM27-.LFBB3
-.LM27:
+	.stabn	68,0,92,.LM49-.LFBB5
+.LM49:
 	movq	%r10, %rsi
 	movl	%r11d, %edx
-	.stabn	68,0,69,.LM28-.LFBB3
-.LM28:
+	.stabn	68,0,91,.LM50-.LFBB5
+.LM50:
 	movl	$24, (%rsp)
 	movq	%rax, 8(%rsp)
 	leaq	32(%rsp), %rax
-	.stabn	68,0,70,.LM29-.LFBB3
-.LM29:
-	leaq	.LC3(%rip), %rdi
-	.stabn	68,0,69,.LM30-.LFBB3
-.LM30:
+	.stabn	68,0,92,.LM51-.LFBB5
+.LM51:
+	leaq	.LC5(%rip), %rdi
+	.stabn	68,0,91,.LM52-.LFBB5
+.LM52:
 	movq	%rax, 16(%rsp)
-	.stabn	68,0,70,.LM31-.LFBB3
-.LM31:
+	.stabn	68,0,92,.LM53-.LFBB5
+.LM53:
 	xorl	%eax, %eax
-	.stabn	68,0,69,.LM32-.LFBB3
-.LM32:
+	.stabn	68,0,91,.LM54-.LFBB5
+.LM54:
 	movl	$48, 4(%rsp)
-	.stabn	68,0,70,.LM33-.LFBB3
-.LM33:
+	.stabn	68,0,92,.LM55-.LFBB5
+.LM55:
 	call	cprintf@PLT
-	.stabn	68,0,71,.LM34-.LFBB3
-.LM34:
+	.stabn	68,0,93,.LM56-.LFBB5
+.LM56:
 	movq	%rbp, %rdi
 	movq	%rsp, %rsi
 	call	vcprintf@PLT
-	.stabn	68,0,72,.LM35-.LFBB3
-.LM35:
-	leaq	.LC4(%rip), %rdi
+	.stabn	68,0,94,.LM57-.LFBB5
+.LM57:
+	leaq	.LC3(%rip), %rdi
 	xorl	%eax, %eax
 	call	cprintf@PLT
-	jmp	.L12
+	jmp	.L20
 	.cfi_endproc
-.LFE2:
+.LFE4:
 	.size	_panic, .-_panic
 	.stabs	"ap:(2,1)",128,0,0,0
-	.stabn	192,0,0,.LFBB3-.LFBB3
-	.stabn	224,0,0,.Lscope3-.LFBB3
-.Lscope3:
+	.stabn	192,0,0,.LFBB5-.LFBB5
+	.stabn	224,0,0,.Lscope5-.LFBB5
+.Lscope5:
 	.section	.rodata.str1.1
-.LC5:
+.LC6:
 	.string	"kernel warning at %s:%d: "
 	.text
 	.p2align 4
 	.stabs	"_warn:F(0,25)",36,0,0,_warn
-	.stabs	"file:P(0,26)",64,0,0,10
+	.stabs	"file:P(0,27)",64,0,0,10
 	.stabs	"line:P(0,1)",64,0,0,11
-	.stabs	"fmt:P(0,26)",64,0,0,6
+	.stabs	"fmt:P(0,27)",64,0,0,6
 	.globl	_warn
 	.type	_warn, @function
 _warn:
-	.stabn	68,0,84,.LM36-.LFBB4
-.LM36:
-.LFBB4:
-.LFB3:
+	.stabn	68,0,106,.LM58-.LFBB6
+.LM58:
+.LFBB6:
+.LFB5:
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -329,7 +491,7 @@ _warn:
 	movq	%r8, 64(%rsp)
 	movq	%r9, 72(%rsp)
 	testb	%al, %al
-	je	.L17
+	je	.L25
 	movaps	%xmm0, 80(%rsp)
 	movaps	%xmm1, 96(%rsp)
 	movaps	%xmm2, 112(%rsp)
@@ -338,72 +500,80 @@ _warn:
 	movaps	%xmm5, 160(%rsp)
 	movaps	%xmm6, 176(%rsp)
 	movaps	%xmm7, 192(%rsp)
-.L17:
-	.stabn	68,0,84,.LM37-.LFBB4
-.LM37:
+.L25:
+	.stabn	68,0,106,.LM59-.LFBB6
+.LM59:
 	movq	%fs:40, %rax
 	movq	%rax, 24(%rsp)
 	xorl	%eax, %eax
-	.stabn	68,0,87,.LM38-.LFBB4
-.LM38:
+	.stabn	68,0,109,.LM60-.LFBB6
+.LM60:
 	leaq	224(%rsp), %rax
-	.stabn	68,0,88,.LM39-.LFBB4
-.LM39:
+	.stabn	68,0,110,.LM61-.LFBB6
+.LM61:
 	movq	%r10, %rsi
 	movl	%r11d, %edx
-	.stabn	68,0,87,.LM40-.LFBB4
-.LM40:
+	.stabn	68,0,109,.LM62-.LFBB6
+.LM62:
 	movq	%rax, 8(%rsp)
 	leaq	32(%rsp), %rax
-	.stabn	68,0,88,.LM41-.LFBB4
-.LM41:
-	leaq	.LC5(%rip), %rdi
-	.stabn	68,0,87,.LM42-.LFBB4
-.LM42:
+	.stabn	68,0,110,.LM63-.LFBB6
+.LM63:
+	leaq	.LC6(%rip), %rdi
+	.stabn	68,0,109,.LM64-.LFBB6
+.LM64:
 	movq	%rax, 16(%rsp)
-	.stabn	68,0,88,.LM43-.LFBB4
-.LM43:
+	.stabn	68,0,110,.LM65-.LFBB6
+.LM65:
 	xorl	%eax, %eax
-	.stabn	68,0,87,.LM44-.LFBB4
-.LM44:
+	.stabn	68,0,109,.LM66-.LFBB6
+.LM66:
 	movl	$24, (%rsp)
 	movl	$48, 4(%rsp)
-	.stabn	68,0,88,.LM45-.LFBB4
-.LM45:
+	.stabn	68,0,110,.LM67-.LFBB6
+.LM67:
 	call	cprintf@PLT
-	.stabn	68,0,89,.LM46-.LFBB4
-.LM46:
+	.stabn	68,0,111,.LM68-.LFBB6
+.LM68:
 	movq	%rsp, %rsi
 	movq	%rbp, %rdi
 	call	vcprintf@PLT
-	.stabn	68,0,90,.LM47-.LFBB4
-.LM47:
+	.stabn	68,0,112,.LM69-.LFBB6
+.LM69:
 	xorl	%eax, %eax
-	leaq	.LC4(%rip), %rdi
+	leaq	.LC3(%rip), %rdi
 	call	cprintf@PLT
-	.stabn	68,0,92,.LM48-.LFBB4
-.LM48:
+	.stabn	68,0,114,.LM70-.LFBB6
+.LM70:
 	movq	24(%rsp), %rax
 	xorq	%fs:40, %rax
-	jne	.L20
+	jne	.L28
 	addq	$208, %rsp
 	.cfi_remember_state
 	.cfi_def_cfa_offset 16
 	popq	%rbp
 	.cfi_def_cfa_offset 8
 	ret
-.L20:
+.L28:
 	.cfi_restore_state
 	call	__stack_chk_fail@PLT
 	.cfi_endproc
-.LFE3:
+.LFE5:
 	.size	_warn, .-_warn
 	.stabs	"ap:(2,1)",128,0,0,0
-	.stabn	192,0,0,.LFBB4-.LFBB4
-	.stabn	224,0,0,.Lscope4-.LFBB4
-.Lscope4:
+	.stabn	192,0,0,.LFBB6-.LFBB6
+	.stabn	224,0,0,.Lscope6-.LFBB6
+.Lscope6:
+	.section	.rodata
+	.align 8
+	.type	msg.1583, @object
+	.size	msg.1583, 9
+msg.1583:
+	.string	"rainbow!"
+	.stabs	"msg:V(0,26)",38,0,0,msg.1583
 	.comm	panicstr,8,8
-	.stabs	"panicstr:G(0,26)",32,0,0,0
+	.stabs	"panicstr:G(0,27)",32,0,0,0
+	.text
 	.stabs	"",100,0,0,.Letext0
 .Letext0:
 	.ident	"GCC: (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0"
